@@ -1,0 +1,4 @@
+empirenotifier\ProcessMessages.class
+empirenotifier\MainApp.class
+empirenotifier\DecodeMessage.class
+empirenotifier\GetCredentials.class
