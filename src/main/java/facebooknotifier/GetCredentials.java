@@ -1,4 +1,4 @@
-package empirenotifier;
+package facebooknotifier;
 
 import java.io.File;
 import java.io.FileNotFoundException;

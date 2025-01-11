@@ -1,4 +1,4 @@
-package empirenotifier;
+package facebooknotifier;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
