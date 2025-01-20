@@ -72,20 +72,21 @@ public class ProcessMessages {
         removeRowChangersLink.setCharAt(228, '\u0000');
         removeRowChangersLink.setCharAt(305, '\u0000');
         String postLinkNoRowChangers = removeRowChangersLink.toString();
-        String remove3D = postLinkNoRowChangers.replaceAll("3D", ""); //HUOM LINKISSÄ SAATTAA PIENELLÄ TSÄÄNSSILLÄ OLLA 3D OIKEASTI. HUOMIOI TÄMÄ!!!!
+        String remove3D = postLinkNoRowChangers.replaceAll("=3D", "=");
         String cleanPostLink = remove3D.replace("_text", "");
         cleanPostLink = cleanPostLink.replaceAll("[^a-zA-Z0-9-_.~:/?#@!$&'()*+,;%=]", "");
         return cleanPostLink;
     }
 
     public static void openFacebookPost(String postLink) {
+        String edgePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+        try {
+            Process process = Runtime.getRuntime().exec(new String[] {edgePath, postLink});
 
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-            try {
-                Desktop.getDesktop().browse(new URI(postLink));
-            } catch (IOException | URISyntaxException e) {
+            Thread.sleep(7000);
+            Runtime.getRuntime().exec("taskkill /F /IM msedge.exe");
+        } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
-            }
         }
     }
 
@@ -113,6 +114,10 @@ public class ProcessMessages {
         if (checkStringForNumberBetween(imgTxt)) {
             triggeredPosts.add(postId + ": BUFF");
             containsKeyWord = true;
+        }
+
+        if (containsKeyWord) {
+            //TriggeredPostAlerter.postAlerter();
         }
     }
 
