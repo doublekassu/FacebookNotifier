@@ -1,12 +1,15 @@
 package facebooknotifier;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.awt.Desktop;
 
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListMessagesResponse;
@@ -41,11 +44,13 @@ public class ProcessMessages {
                     String rawMessage = DecodeMessage.decodeRawMessage(rawData);
                     String imgTxt = rawMessage.substring(rawMessage.lastIndexOf("Hei Kasimir") + 13, rawMessage.lastIndexOf("=3D=3D=3D") - 121);
                     String postId = rawMessage.substring(rawMessage.lastIndexOf("Message-ID: <") + 13, rawMessage.lastIndexOf("Message-ID: <") + 29);
+                    String postLink = parseLink(rawMessage); 
                     System.out.println(imgTxt);
 
-                    checkPostList(postId);
+                    checkPostList(postId, postLink);
                     checkKeywords(imgTxt, postId);
                     System.out.println("----------------------------------------------------------------------------------------");
+                    
                 }
                 counter++;
             }
@@ -54,14 +59,33 @@ public class ProcessMessages {
         }
     }
 
-    public static void openFacebookPost(String postId) {
-        String facebookUrl = "https://facebook.com/groups/csgofinland/permalink/" + postId;
-        String[] command = {"cmd.exe", "/c", "start", "msedge", facebookUrl};
+    public String parseLink(String rawMessage) {
+        String postLink = rawMessage.substring(rawMessage.lastIndexOf("A4 Facebookissa") + 17, rawMessage.lastIndexOf("&irms") + 9);
+        String cleanPostLink = createCleanLink(postLink);
+        return cleanPostLink;
+    }
 
-        try {
-            Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+    public String createCleanLink (String postLink) {
+        StringBuilder removeRowChangersLink = new StringBuilder(postLink);
+        removeRowChangersLink.setCharAt(74, '\u0000');
+        removeRowChangersLink.setCharAt(151, '\u0000');
+        removeRowChangersLink.setCharAt(228, '\u0000');
+        removeRowChangersLink.setCharAt(305, '\u0000');
+        String postLinkNoRowChangers = removeRowChangersLink.toString();
+        String remove3D = postLinkNoRowChangers.replaceAll("3D", ""); //HUOM LINKISSÄ SAATTAA PIENELLÄ TSÄÄNSSILLÄ OLLA 3D OIKEASTI. HUOMIOI TÄMÄ!!!!
+        String cleanPostLink = remove3D.replace("_text", "");
+        cleanPostLink = cleanPostLink.replaceAll("[^a-zA-Z0-9-_.~:/?#@!$&'()*+,;%=]", "");
+        return cleanPostLink;
+    }
+
+    public static void openFacebookPost(String postLink) {
+
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            try {
+                Desktop.getDesktop().browse(new URI(postLink));
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -90,10 +114,6 @@ public class ProcessMessages {
             triggeredPosts.add(postId + ": BUFF");
             containsKeyWord = true;
         }
-
-        if (containsKeyWord) {
-            openFacebookPost(postId);
-        }
     }
 
     public boolean checkStringForNumberBetween(String imgTxt) {
@@ -119,9 +139,10 @@ public class ProcessMessages {
     }
 
     //Checks opened posts list and adds if new
-    public void checkPostList(String postId) {
+    public void checkPostList(String postId, String postLink) {
         if (!openedPosts.contains(postId)) {
             openedPosts.add(postId);
+            openFacebookPost(postLink);
         }
     }
 }
