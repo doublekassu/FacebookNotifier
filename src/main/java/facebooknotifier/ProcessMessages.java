@@ -1,15 +1,13 @@
 package facebooknotifier;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.awt.Desktop;
 
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListMessagesResponse;
@@ -18,10 +16,12 @@ import com.google.api.services.gmail.model.Message;
 public class ProcessMessages {
     private ArrayList<String> openedPosts;
     private ArrayList<String> triggeredPosts;
+    private TriggeredPostAlerter triggeredPostAlerter;
 
-    public ProcessMessages() {
+    public ProcessMessages(TriggeredPostAlerter triggeredPostAlerter) {
         openedPosts = new ArrayList<>();
         triggeredPosts = new ArrayList<>();
+        this.triggeredPostAlerter = triggeredPostAlerter;
     }
     
 
@@ -117,12 +117,12 @@ public class ProcessMessages {
         }
 
         if (containsKeyWord) {
-            //TriggeredPostAlerter.postAlerter();
+            triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId);
         }
     }
 
     public boolean checkStringForNumberBetween(String imgTxt) {
-        long minNumber = 80;
+        long minNumber = 70;
         long maxNumber = 94;
 
         //Regex that finds all numbers from msg
