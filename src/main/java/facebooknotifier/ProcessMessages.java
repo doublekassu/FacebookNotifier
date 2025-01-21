@@ -110,7 +110,7 @@ public class ProcessMessages {
             }
         }
 
-        //Check if has Buff keywords
+        //Check if imgtxt has Buff keywords
         if (checkStringForNumberBetween(imgTxt)) {
             triggeredPosts.add(postId + ": BUFF");
             containsKeyWord = true;
@@ -122,8 +122,8 @@ public class ProcessMessages {
     }
 
     public boolean checkStringForNumberBetween(String imgTxt) {
-        int minNumber = 80;
-        int maxNumber = 94;
+        long minNumber = 80;
+        long maxNumber = 94;
 
         //Regex that finds all numbers from msg
         Pattern pattern = Pattern.compile("\\d+");
@@ -133,7 +133,7 @@ public class ProcessMessages {
 
         //Integrate all numbers
         while (matcher.find()) {
-            int number = Integer.parseInt(matcher.group());
+            long number = Long.parseLong(matcher.group());
 
             if (number >= minNumber && number <= maxNumber) {
                 checkNumbers = true;
