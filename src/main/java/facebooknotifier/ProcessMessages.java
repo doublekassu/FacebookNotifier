@@ -1,6 +1,5 @@
 package facebooknotifier;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,10 +80,10 @@ public class ProcessMessages {
     public static void openFacebookPost(String postLink) {
         String edgePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
         try {
-            Process process = Runtime.getRuntime().exec(new String[] {edgePath, postLink});
+            Runtime.getRuntime().exec(new String[] {edgePath, postLink});
 
             Thread.sleep(7000);
-            Runtime.getRuntime().exec("taskkill /F /IM msedge.exe");
+            new ProcessBuilder("taskkill", "/F", "/IM", "msedge.exe").start();
         } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
         }
