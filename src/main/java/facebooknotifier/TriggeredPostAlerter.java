@@ -22,10 +22,10 @@ public class TriggeredPostAlerter {
         this.jda.addEventListener(new DiscordListeners());
     }
 
-    public void newPostAlertDiscord(String channelId, String imgtxt, String postId) { //Thread.sleep (60000) didn't help for receiving sound notification in DC for every post
+    public void newPostAlertDiscord(String channelId, String imgtxt, String postId) {
         TextChannel channel = jda.getTextChannelById(channelId);
         if (channel != null) {
-            channel.sendMessage(imgtxt + "\nhttps://facebook.com/groups/csgofinland/permalink/" + postId).queue();
+            channel.sendMessage("@everyone\n" + imgtxt + "\nhttps://facebook.com/groups/csgofinland/permalink/" + postId + "\n").queue();
         } else {
             System.out.println("Channel with ID " + channelId + " not found.");
         }
