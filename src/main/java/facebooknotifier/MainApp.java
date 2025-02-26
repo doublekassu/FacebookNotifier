@@ -21,7 +21,7 @@ public class MainApp {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
         System.out.println("\n HERE STARTS NEW MESSAGES");
-        // Jatkuva odottaminen uusille viesteille
+        // Continuous waiting for new messages
         while (true) {
             processMessages.processMessages(service);;  // Käsitellään saapuneet viestit
             Thread.sleep(10000);  // Odotetaan 10 sekuntia ennen seuraavaa tarkistusta
