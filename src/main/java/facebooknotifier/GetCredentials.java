@@ -1,7 +1,9 @@
 package facebooknotifier;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,6 +26,7 @@ public class GetCredentials {
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_READONLY);
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    private static final String TELEGRAM_API_KEY_PATH = "telegram/telegram_key.txt";
 
     public static Credential getCredentials(final com.google.api.client.http.HttpTransport HTTP_TRANSPORT) throws IOException {
         InputStream in = Files.newInputStream(new File(CREDENTIALS_FILE_PATH).toPath());
@@ -44,5 +47,12 @@ public class GetCredentials {
 
     public static JsonFactory getJSON_FACTORY() {
         return JSON_FACTORY;
+    }
+
+    public static String readTelegramApi() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(TELEGRAM_API_KEY_PATH));
+        String telegramApiKey = reader.readLine();
+        reader.close();
+        return telegramApiKey;
     }
 }

@@ -3,14 +3,19 @@ package facebooknotifier;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
+import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.services.gmail.Gmail;
 public class MainApp {
     private static final String APPLICATION_NAME = "Skin notifier";
 
-    public static void main(String... args) throws IOException, GeneralSecurityException, InterruptedException {
-        TriggeredPostAlerter triggeredPostAlerter = new TriggeredPostAlerter();
-        ProcessMessages processMessages = new ProcessMessages(triggeredPostAlerter);
+    public static void main(String... args) throws IOException, GeneralSecurityException, InterruptedException, TelegramApiException {
+        //TriggeredPostAlerter triggeredPostAlerter = new TriggeredPostAlerter();
+        String telegramApi = GetCredentials.readTelegramApi();
+        TelegramBot telegramBot = new TelegramBot(telegramApi);
+        ProcessMessages processMessages = new ProcessMessages(telegramBot);
         final com.google.api.client.http.HttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Gmail service = new Gmail.Builder(HTTP_TRANSPORT, GetCredentials.getJSON_FACTORY() , GetCredentials.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)

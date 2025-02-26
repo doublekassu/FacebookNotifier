@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
@@ -16,15 +19,26 @@ public class ProcessMessages {
     private ArrayList<String> openedPosts;
     private ArrayList<String> triggeredPosts;
     private TriggeredPostAlerter triggeredPostAlerter;
+    private TelegramBot telegramBot;
+    private static String imgTxt;
+    private static String postId;
 
-    public ProcessMessages(TriggeredPostAlerter triggeredPostAlerter) {
+    public ProcessMessages(TelegramBot telegramBot) throws IOException, TelegramApiException {
         openedPosts = new ArrayList<>();
         triggeredPosts = new ArrayList<>();
-        this.triggeredPostAlerter = triggeredPostAlerter;
+        this.telegramBot = telegramBot;
     }
-    
+
+    public static String getPostId() {
+        return postId;
+    }
+
+    public static String getImgtxt() {
+        return imgTxt;
+    }
 
     public void processMessages(Gmail service) throws IOException {
+
         int counter = 0;
 
         ListMessagesResponse messagesResponse = service.users().messages().list("me")
@@ -116,7 +130,8 @@ public class ProcessMessages {
         }
 
         if (containsKeyWord) {
-            triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId);
+            //triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId);
+            telegramBot.triggeredPost("6841309828", imgTxt, postId);
         }
     }
 
