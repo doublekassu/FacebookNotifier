@@ -44,6 +44,9 @@ public class ProcessMessages {
                     String imgTxt = rawMessage.substring(rawMessage.lastIndexOf("Hei Kasimir") + 13, rawMessage.lastIndexOf("=3D=3D=3D") - 121);
                     String postId = rawMessage.substring(rawMessage.lastIndexOf("Message-ID: <") + 13, rawMessage.lastIndexOf("Message-ID: <") + 29);
                     String postLink = parseLink(rawMessage); 
+
+                    //Switch image text to lower case characters only
+                    imgTxt = imgTxt.toLowerCase();
                     System.out.println(imgTxt);
 
                     checkPostList(postId, postLink);
@@ -100,13 +103,24 @@ public class ProcessMessages {
         }
         
         //Check if imgtxt has Empire keywords 
-        List<String> empireKeyWords = Arrays.asList("0.5", "0,5", "empire", "koli", "coin");
+        //ADD DIGIT+c IS A TRIGGER WORD TO FOR EMPIRE
+        List<String> empireKeyWords = Arrays.asList("0.5", "0,5", "empire", "koli", "coin", "koin");
         for (int i=0; i<empireKeyWords.size(); i++) {
             if (imgTxt.contains(empireKeyWords.get(i))) {
                 triggeredPosts.add(postId + ": EMPIRE");
                 containsKeyWord = true;
                 break;
             }
+        }
+
+        //Check if image text includes any integer + c for example 300c
+        String integerAndC = "\\d";
+        Pattern pattern = Pattern.compile(integerAndC + "c");
+        Matcher matcher = pattern.matcher(imgTxt);
+
+        if (matcher.find()) {
+            System.out.println("Found integer + c!");
+            containsKeyWord = true;
         }
 
         //Check if imgtxt has Buff keywords

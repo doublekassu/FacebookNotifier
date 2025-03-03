@@ -1,4 +1,6 @@
-empirenotifier\ProcessMessages.class
-empirenotifier\MainApp.class
-empirenotifier\DecodeMessage.class
-empirenotifier\GetCredentials.class
+facebooknotifier\DecodeMessage.class
+facebooknotifier\TriggeredPostAlerter.class
+facebooknotifier\MainApp.class
+facebooknotifier\DiscordListeners.class
+facebooknotifier\ProcessMessages.class
+facebooknotifier\GetCredentials.class

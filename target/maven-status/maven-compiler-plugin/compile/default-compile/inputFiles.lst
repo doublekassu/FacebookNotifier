@@ -1,4 +1,7 @@
-D:\empirenotifier\src\main\java\empirenotifier\DecodeMessage.java
-D:\empirenotifier\src\main\java\empirenotifier\GetCredentials.java
-D:\empirenotifier\src\main\java\empirenotifier\MainApp.java
-D:\empirenotifier\src\main\java\empirenotifier\ProcessMessages.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\AlertThread.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\DecodeMessage.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\DiscordListeners.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\GetCredentials.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\MainApp.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\ProcessMessages.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\TriggeredPostAlerter.java
