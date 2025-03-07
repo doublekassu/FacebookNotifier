@@ -1,6 +1,8 @@
 package facebooknotifier;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,9 +10,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.net.QuotedPrintableCodec;
+
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
+import com.google.common.io.BaseEncoding;
 
 public class ProcessMessages {
     private ArrayList<String> openedPosts;
@@ -26,16 +33,25 @@ public class ProcessMessages {
 
     public void processMessages(Gmail service) throws IOException {
         int counter = 0;
-
+        
         ListMessagesResponse messagesResponse = service.users().messages().list("me")
-                .setLabelIds(Collections.singletonList("Label_6175409980112628348")).execute();
+                .setLabelIds(Collections.singletonList("Label_5017367702893122078")).execute();
+        
+        //Print all GMAIL labels' ids
+        /*ListLabelsResponse listLabelsResponse = service.users().labels().list("me").execute();
+        List<Label> labels = listLabelsResponse.getLabels();
+
+        for (Label label : labels) {
+            System.out.println("Name: " + label.getName() + "   ID: " + label.getId());
+        }
+        */
 
         if (messagesResponse.getMessages() == null || messagesResponse.getMessages().isEmpty()) {
             System.out.println("Messages weren't found");
         } else {
             System.out.println("\nTRIGGERED POSTS: " + triggeredPosts);
             for (Message message : messagesResponse.getMessages()) {
-                if (counter < 5) {
+                if (counter < 1) {
 
                     Message fullMessage = service.users().messages().get("me", message.getId()).setFormat("RAW").execute();
                     System.out.println("\nViesti ID: " + fullMessage.getId());
@@ -45,10 +61,15 @@ public class ProcessMessages {
                     String postId = rawMessage.substring(rawMessage.lastIndexOf("Message-ID: <") + 13, rawMessage.lastIndexOf("Message-ID: <") + 29);
                     String postLink = parseLink(rawMessage); 
 
-                    //Switch image text to lower case characters only
-                    imgTxt = imgTxt.toLowerCase();
-                    System.out.println(imgTxt);
+                    //Switch image text to lower case characters only and decode with UTF-8
+                    //imgTxt = imgTxt.toLowerCase();
+                    
+                    String hex = "E282AC";
+                    byte[] bytes = BaseEncoding.base16().decode(hex.toUpperCase()); // Muuntaa hexin byte-taulukoksi
+                    String decodedString = new String(bytes, StandardCharsets.UTF_8); // Muuntaa UTF-8-merkkijonoksi
 
+                    System.out.println("Decoded String: " + decodedString); // Tulostaa: €
+                    
                     checkPostList(postId, postLink);
                     checkKeywords(imgTxt, postId);
                     System.out.println("----------------------------------------------------------------------------------------");
@@ -103,7 +124,6 @@ public class ProcessMessages {
         }
         
         //Check if imgtxt has Empire keywords 
-        //ADD DIGIT+c IS A TRIGGER WORD TO FOR EMPIRE
         List<String> empireKeyWords = Arrays.asList("0.5", "0,5", "empire", "koli", "coin", "koin");
         for (int i=0; i<empireKeyWords.size(); i++) {
             if (imgTxt.contains(empireKeyWords.get(i))) {
@@ -114,12 +134,12 @@ public class ProcessMessages {
         }
 
         //Check if image text includes any integer + c for example 300c
-        String integerAndC = "\\d";
+        String integerAndC = "\\d+";
         Pattern pattern = Pattern.compile(integerAndC + "c");
         Matcher matcher = pattern.matcher(imgTxt);
 
         if (matcher.find()) {
-            System.out.println("Found integer + c!");
+            triggeredPosts.add(postId + ": EMPIRE");
             containsKeyWord = true;
         }
 
