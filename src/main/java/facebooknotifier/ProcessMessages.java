@@ -1,7 +1,6 @@
 package facebooknotifier;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,11 +9,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.net.QuotedPrintableCodec;
-
 import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.model.Label;
+import com.google.api.services.gmail.model.ListLabelsResponse;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.common.io.BaseEncoding;
@@ -40,7 +37,7 @@ public class ProcessMessages {
         //Print all GMAIL labels' ids
         /*ListLabelsResponse listLabelsResponse = service.users().labels().list("me").execute();
         List<Label> labels = listLabelsResponse.getLabels();
-
+        
         for (Label label : labels) {
             System.out.println("Name: " + label.getName() + "   ID: " + label.getId());
         }
@@ -138,13 +135,13 @@ public class ProcessMessages {
         Pattern pattern = Pattern.compile(integerAndC + "c");
         Matcher matcher = pattern.matcher(imgTxt);
 
-        if (matcher.find()) {
+        if (matcher.find() && containsKeyWord == false) {
             triggeredPosts.add(postId + ": EMPIRE");
             containsKeyWord = true;
         }
 
         //Check if imgtxt has Buff keywords
-        if (checkStringForNumberBetween(imgTxt)) {
+        if (checkStringForNumberBetween(imgTxt) && containsKeyWord == false) {
             triggeredPosts.add(postId + ": BUFF");
             containsKeyWord = true;
         }
