@@ -9,8 +9,7 @@ public class MainApp {
     private static final String APPLICATION_NAME = "Skin notifier";
 
     public static void main(String... args) throws IOException, GeneralSecurityException, InterruptedException {
-        TriggeredPostAlerter triggeredPostAlerter = new TriggeredPostAlerter();
-        ProcessMessages processMessages = new ProcessMessages(triggeredPostAlerter);
+        ProcessMessages processMessages = new ProcessMessages();
         final com.google.api.client.http.HttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Gmail service = new Gmail.Builder(HTTP_TRANSPORT, GetCredentials.getJSON_FACTORY() , GetCredentials.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)

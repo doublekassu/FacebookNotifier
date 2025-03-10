@@ -3,28 +3,19 @@ package facebooknotifier;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.apache.commons.codec.net.QuotedPrintableCodec;
 
 import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.model.Label;
-import com.google.api.services.gmail.model.ListLabelsResponse;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
-import com.google.common.io.BaseEncoding;
 
 public class ProcessMessages {
     private ArrayList<String> openedPosts;
-    private ArrayList<String> triggeredPosts;
-    private TriggeredPostAlerter triggeredPostAlerter;
+    private CheckForKeywords checkForKeywords = new CheckForKeywords();
 
-    public ProcessMessages(TriggeredPostAlerter triggeredPostAlerter) {
+    public ProcessMessages() {
         openedPosts = new ArrayList<>();
-        triggeredPosts = new ArrayList<>();
-        this.triggeredPostAlerter = triggeredPostAlerter;
     }
     
 
@@ -46,7 +37,6 @@ public class ProcessMessages {
         if (messagesResponse.getMessages() == null || messagesResponse.getMessages().isEmpty()) {
             System.out.println("Messages weren't found");
         } else {
-            System.out.println("\nTRIGGERED POSTS: " + triggeredPosts);
             for (Message message : messagesResponse.getMessages()) {
                 if (counter < 1) {
 
@@ -58,24 +48,25 @@ public class ProcessMessages {
                     String postId = rawMessage.substring(rawMessage.lastIndexOf("Message-ID: <") + 13, rawMessage.lastIndexOf("Message-ID: <") + 29);
                     String postLink = parseLink(rawMessage); 
 
-                    //Switch image text to lower case characters only and decode with UTF-8
-                    //imgTxt = imgTxt.toLowerCase();
-                    
-                    String hex = "E282AC";
-                    byte[] bytes = BaseEncoding.base16().decode(hex.toUpperCase()); // Muuntaa hexin byte-taulukoksi
-                    String decodedString = new String(bytes, StandardCharsets.UTF_8); // Muuntaa UTF-8-merkkijonoksi
+                    //Decode imgtxt with UTF-8 and change it to lower case characters
+                    try {
+                        QuotedPrintableCodec codec = new QuotedPrintableCodec(StandardCharsets.UTF_8.name());
+                        imgTxt = codec.decode(imgTxt);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                    System.out.println("Decoded String: " + decodedString); // Tulostaa: €
+                    imgTxt = imgTxt.toLowerCase();
                     
                     checkPostList(postId, postLink);
-                    checkKeywords(imgTxt, postId);
+                    checkForKeywords.checkKeywords(imgTxt, postId);
                     System.out.println("----------------------------------------------------------------------------------------");
                     
                 }
                 counter++;
             }
             System.out.println("THESE POSTS HAVE BEEN ALREADY OPENED: " + openedPosts);
-            System.out.println("\nTRIGGERED POSTS: " + triggeredPosts);
+            System.out.println("\nTRIGGERED POSTS: " + checkForKeywords.getTriggeredPosts());
         }
     }
 
@@ -108,69 +99,6 @@ public class ProcessMessages {
         } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
         }
-    }
-
-    public void checkKeywords(String imgTxt, String postId) {
-        boolean containsKeyWord = false;
-
-        //Check if the triggered post has already been added to the list
-        for (String listElement : triggeredPosts) {
-            if (listElement.contains(postId)) {
-                return;
-            }
-        }
-        
-        //Check if imgtxt has Empire keywords 
-        List<String> empireKeyWords = Arrays.asList("0.5", "0,5", "empire", "koli", "coin", "koin");
-        for (int i=0; i<empireKeyWords.size(); i++) {
-            if (imgTxt.contains(empireKeyWords.get(i))) {
-                triggeredPosts.add(postId + ": EMPIRE");
-                containsKeyWord = true;
-                break;
-            }
-        }
-
-        //Check if image text includes any integer + c for example 300c
-        String integerAndC = "\\d+";
-        Pattern pattern = Pattern.compile(integerAndC + "c");
-        Matcher matcher = pattern.matcher(imgTxt);
-
-        if (matcher.find() && containsKeyWord == false) {
-            triggeredPosts.add(postId + ": EMPIRE");
-            containsKeyWord = true;
-        }
-
-        //Check if imgtxt has Buff keywords
-        if (checkStringForNumberBetween(imgTxt) && containsKeyWord == false) {
-            triggeredPosts.add(postId + ": BUFF");
-            containsKeyWord = true;
-        }
-
-        if (containsKeyWord) {
-            triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId);
-        }
-    }
-
-    public boolean checkStringForNumberBetween(String imgTxt) {
-        long minNumber = 70;
-        long maxNumber = 94;
-
-        //Regex that finds all numbers from msg
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(imgTxt);
-
-        boolean checkNumbers = false;
-
-        //Integrate all numbers
-        while (matcher.find()) {
-            long number = Long.parseLong(matcher.group());
-
-            if (number >= minNumber && number <= maxNumber) {
-                checkNumbers = true;
-                break;
-            }
-        }
-        return checkNumbers;
     }
 
     //Checks opened posts list and adds if new
