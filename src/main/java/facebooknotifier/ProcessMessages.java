@@ -38,7 +38,7 @@ public class ProcessMessages {
             System.out.println("Messages weren't found");
         } else {
             for (Message message : messagesResponse.getMessages()) {
-                if (counter < 1) {
+                if (counter < 2) {
 
                     Message fullMessage = service.users().messages().get("me", message.getId()).setFormat("RAW").execute();
                     System.out.println("\nViesti ID: " + fullMessage.getId());
@@ -71,7 +71,7 @@ public class ProcessMessages {
     }
 
     public String parseLink(String rawMessage) {
-        String postLink = rawMessage.substring(rawMessage.lastIndexOf("A4 Facebookissa") + 17, rawMessage.lastIndexOf("&irms") + 9);
+        String postLink = rawMessage.substring(rawMessage.lastIndexOf("A4 Facebookissa") + 17, rawMessage.indexOf("=3D=3D", rawMessage.lastIndexOf("A4 Facebookissa") + 17));
         String cleanPostLink = createCleanLink(postLink);
         return cleanPostLink;
     }
@@ -89,23 +89,11 @@ public class ProcessMessages {
         return cleanPostLink;
     }
 
-    public static void openFacebookPost(String postLink) {
-        String edgePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
-        try {
-            Runtime.getRuntime().exec(new String[] {edgePath, postLink});
-
-            Thread.sleep(7000);
-            new ProcessBuilder("taskkill", "/F", "/IM", "msedge.exe").start();
-        } catch (InterruptedException | IOException e) {
-                e.printStackTrace();
-        }
-    }
-
     //Checks opened posts list and adds if new
     public void checkPostList(String postId, String postLink) {
         if (!openedPosts.contains(postId)) {
             openedPosts.add(postId);
-            openFacebookPost(postLink);
+            OpenFacebookPost.openFacebookPost(postLink);
         }
     }
 }

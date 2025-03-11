@@ -17,7 +17,6 @@ public class CheckForKeywords {
         try {
             triggeredPostAlerter = new TriggeredPostAlerter();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -35,6 +34,10 @@ public class CheckForKeywords {
                 return;
             }
         }
+
+        //Check if the skins are being sold in advance
+        //Meaning: of the words: ennakko, lukko, huomenna, päivä, aukeaa
+        List<String> sellingInAdvanceKeyWords = Arrays.asList("ennak", "luk", "huome", "pv", "auk");
         
         //Check if imgtxt has Empire keywords 
         List<String> empireKeyWords = Arrays.asList("0.5", "0,5", "empire", "koli", "coin", "koin");

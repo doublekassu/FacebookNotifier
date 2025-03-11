@@ -14,11 +14,11 @@ public class MainApp {
         Gmail service = new Gmail.Builder(HTTP_TRANSPORT, GetCredentials.getJSON_FACTORY() , GetCredentials.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
-        System.out.println("\n HERE STARTS NEW MESSAGES");
-        // Jatkuva odottaminen uusille viesteille
+
+        //Checking every 10 seconds for new messages
         while (true) {
-            processMessages.processMessages(service);;  // Käsitellään saapuneet viestit
-            Thread.sleep(10000);  // Odotetaan 10 sekuntia ennen seuraavaa tarkistusta
+            processMessages.processMessages(service);
+            Thread.sleep(10000);
         }
     }
 }
