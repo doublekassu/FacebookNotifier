@@ -38,6 +38,13 @@ public class CheckForKeywords {
         //Check if the skins are being sold in advance
         //Meaning: of the words: ennakko, lukko, huomenna, päivä, aukeaa
         List<String> sellingInAdvanceKeyWords = Arrays.asList("ennak", "luk", "huome", "pv", "auk");
+        for (int i=0; i<sellingInAdvanceKeyWords.size(); i++) {
+            if (imgTxt.contains(sellingInAdvanceKeyWords.get(i))) {
+                triggeredPosts.add(postId + ": ENNAKKO");
+                containsKeyWord = true;
+                break;
+            }
+        }
         
         //Check if imgtxt has Empire keywords 
         List<String> empireKeyWords = Arrays.asList("0.5", "0,5", "empire", "koli", "coin", "koin");

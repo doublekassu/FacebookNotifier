@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.codec.net.QuotedPrintableCodec;
 
 import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.model.Label;
+import com.google.api.services.gmail.model.ListLabelsResponse;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 
@@ -23,7 +27,7 @@ public class ProcessMessages {
         int counter = 0;
         
         ListMessagesResponse messagesResponse = service.users().messages().list("me")
-                .setLabelIds(Collections.singletonList("Label_5017367702893122078")).execute();
+                .setLabelIds(Collections.singletonList("Label_6175409980112628348")).execute();
         
         //Print all GMAIL labels' ids
         /*ListLabelsResponse listLabelsResponse = service.users().labels().list("me").execute();
@@ -31,14 +35,14 @@ public class ProcessMessages {
         
         for (Label label : labels) {
             System.out.println("Name: " + label.getName() + "   ID: " + label.getId());
-        }
-        */
+        }*/
+        
 
         if (messagesResponse.getMessages() == null || messagesResponse.getMessages().isEmpty()) {
             System.out.println("Messages weren't found");
         } else {
             for (Message message : messagesResponse.getMessages()) {
-                if (counter < 2) {
+                if (counter < 5) {
 
                     Message fullMessage = service.users().messages().get("me", message.getId()).setFormat("RAW").execute();
                     System.out.println("\nViesti ID: " + fullMessage.getId());
