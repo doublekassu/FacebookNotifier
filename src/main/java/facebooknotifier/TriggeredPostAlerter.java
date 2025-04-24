@@ -22,10 +22,10 @@ public class TriggeredPostAlerter {
         this.jda.addEventListener(new DiscordListeners());
     }
 
-    public void newPostAlertDiscord(String channelId, String imgtxt, String postId) {
+    public void newPostAlertDiscord(String channelId, String imgtxt, String postId, String postLink) {
         TextChannel channel = jda.getTextChannelById(channelId);
         if (channel != null) {
-            channel.sendMessage("@everyone\n" + imgtxt + "\nhttps://facebook.com/groups/csgofinland/permalink/" + postId + "\n").queue();
+            channel.sendMessage(imgtxt + "\n" + postLink + "\n").queue();
         } else {
             System.out.println("Channel with ID " + channelId + " not found.");
         }

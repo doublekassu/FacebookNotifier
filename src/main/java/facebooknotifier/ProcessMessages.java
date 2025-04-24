@@ -2,42 +2,51 @@ package facebooknotifier;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.Scanner;
 
 import org.apache.commons.codec.net.QuotedPrintableCodec;
 
 import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.model.Label;
-import com.google.api.services.gmail.model.ListLabelsResponse;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 
 public class ProcessMessages {
     private ArrayList<String> openedPosts;
     private CheckForKeywords checkForKeywords = new CheckForKeywords();
+    private String folderLabel;
+    private String facebookName;
 
-    public ProcessMessages() {
+    public ProcessMessages() throws IOException {
         openedPosts = new ArrayList<>();
+        folderLabel = getFolderLabel();
+        facebookName = getFacebookName();
+    }
+
+    private String getFolderLabel() throws IOException {
+        Scanner labelScanner = new Scanner(Paths.get("./settings/folder_label.txt"), StandardCharsets.UTF_8.name());
+        String folderLabel = labelScanner.useDelimiter("\\A").next();
+        labelScanner.close();
+
+        return folderLabel;
+    }
+
+    private String getFacebookName() throws IOException {
+        Scanner facebookNameScanner = new Scanner(Paths.get("./settings/facebook_name.txt"), StandardCharsets.UTF_8.name());
+        String facebookName = facebookNameScanner.useDelimiter("\\A").next();
+        facebookNameScanner.close();
+
+        return facebookName;
     }
     
-
     public void processMessages(Gmail service) throws IOException {
         int counter = 0;
         
         ListMessagesResponse messagesResponse = service.users().messages().list("me")
-                .setLabelIds(Collections.singletonList("Label_6175409980112628348")).execute();
+                .setLabelIds(Collections.singletonList(folderLabel)).execute();
         
-        //Print all GMAIL labels' ids
-        /*ListLabelsResponse listLabelsResponse = service.users().labels().list("me").execute();
-        List<Label> labels = listLabelsResponse.getLabels();
-        
-        for (Label label : labels) {
-            System.out.println("Name: " + label.getName() + "   ID: " + label.getId());
-        }*/
-        
-
         if (messagesResponse.getMessages() == null || messagesResponse.getMessages().isEmpty()) {
             System.out.println("Messages weren't found");
         } else {
@@ -48,7 +57,7 @@ public class ProcessMessages {
                     System.out.println("\nViesti ID: " + fullMessage.getId());
                     String rawData = fullMessage.getRaw();
                     String rawMessage = DecodeMessage.decodeRawMessage(rawData);
-                    String imgTxt = rawMessage.substring(rawMessage.lastIndexOf("Hei Kasimir") + 13, rawMessage.lastIndexOf("=3D=3D=3D") - 121);
+                    String imgTxt = rawMessage.substring(rawMessage.lastIndexOf("Hei " + facebookName) + 13, rawMessage.lastIndexOf("=3D=3D=3D") - 121);
                     String postId = rawMessage.substring(rawMessage.lastIndexOf("Message-ID: <") + 13, rawMessage.lastIndexOf("Message-ID: <") + 29);
                     String postLink = parseLink(rawMessage); 
 
@@ -63,7 +72,8 @@ public class ProcessMessages {
                     imgTxt = imgTxt.toLowerCase();
                     
                     checkPostList(postId, postLink);
-                    checkForKeywords.checkKeywords(imgTxt, postId);
+                    checkForKeywords.checkKeywords(imgTxt, postId, postLink);
+
                     System.out.println("----------------------------------------------------------------------------------------");
                     
                 }

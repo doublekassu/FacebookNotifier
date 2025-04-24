@@ -1,7 +1,12 @@
-C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\AlertThread.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\CheckForKeywords.java
 C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\DecodeMessage.java
 C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\DiscordListeners.java
 C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\GetCredentials.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\KeyWords.java
 C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\MainApp.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\Menu.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\OpenFacebookPost.java
 C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\ProcessMessages.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\Settings.java
+C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\StartProgram.java
 C:\Users\kasim\Documents\FacebookNotifier\src\main\java\facebooknotifier\TriggeredPostAlerter.java

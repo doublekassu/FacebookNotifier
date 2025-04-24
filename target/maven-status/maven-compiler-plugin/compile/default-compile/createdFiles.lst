@@ -1,6 +1,12 @@
+facebooknotifier\StartProgram.class
 facebooknotifier\DecodeMessage.class
-facebooknotifier\TriggeredPostAlerter.class
+facebooknotifier\Menu.class
+facebooknotifier\Settings.class
+facebooknotifier\KeyWords.class
 facebooknotifier\MainApp.class
-facebooknotifier\DiscordListeners.class
 facebooknotifier\ProcessMessages.class
+facebooknotifier\TriggeredPostAlerter.class
+facebooknotifier\CheckForKeywords.class
+facebooknotifier\OpenFacebookPost.class
+facebooknotifier\DiscordListeners.class
 facebooknotifier\GetCredentials.class
