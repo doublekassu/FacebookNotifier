@@ -39,7 +39,7 @@ public class KeyWords {
     }
 
     private void changeKeyWords() {
-        System.out.println("\nSet keywords that will send you a notification on Discord if they're included in a Facebook post! Please leave a whitespace between each keyword!");
+        System.out.println("\nSet keywords that will send you a notification on Discord if they're included in a Facebook post! The keywords are categorized by lines. The first word of each line is the name of the category and it's not included in the scans! Please leave a whitespace between each keyword!\nExample of keyword category: category_name keyword1 keyword2");
         Desktop desktop = Desktop.getDesktop();
         if (keyWordFile.exists()) {
             try {
