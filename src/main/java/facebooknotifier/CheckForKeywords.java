@@ -72,23 +72,6 @@ public class CheckForKeywords {
         }
     }
 
-    /*private void keyWordTxtToList()  {
-        Scanner keyWordScanner;
-        try {
-            keyWordScanner = new Scanner(new File("./settings/keywords.txt"));
-            
-            //Skipping the first value of the line
-            keyWordScanner.next();
-            
-            while (keyWordScanner.hasNext()) {
-                keyWordsTxtList.add(keyWordScanner.next());
-            }
-            keyWordScanner.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }*/
-
     public ArrayList<String> getTriggeredPosts() {
         return triggeredPosts;
     }
@@ -103,14 +86,6 @@ public class CheckForKeywords {
                 return;
             }
         }
-
-        /*for (int i=0; i<keyWordsTxtList.size(); i++) {
-            if (imgTxt.contains(keyWordsTxtList.get(i))) {
-                triggeredPosts.add(postId);
-                containsKeyWord = true;
-                break;
-            }
-        }*/
 
         for (String key : keyWordCategoryMap.keySet()) {
             List<String> keyWordList = keyWordCategoryMap.get(key);
@@ -133,6 +108,14 @@ public class CheckForKeywords {
         if (containsKeyWord) {
             triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId, postLink, categoryName);
         }
+    }
+
+    private void keyNumberToList() {
+
+    }
+
+    public boolean checkStringForNumberBetween(String imgTxt) {
+        return true;
     }
 
     //Check if the post's text includes numbers between the set keynumbers
