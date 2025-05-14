@@ -2,7 +2,10 @@ package facebooknotifier;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.io.File;
 
 public class CheckForKeywords {
@@ -13,11 +16,12 @@ public class CheckForKeywords {
     private TriggeredPostAlerter triggeredPostAlerter;
 
     private ArrayList<String> keyWordsTxtList;
+    private HashMap<String, List<String>> keyWordCategoryMap = new HashMap<>();
 
     public CheckForKeywords()  {
         triggeredPosts = new ArrayList<>();
         keyWordsTxtList = new ArrayList<>();
-        keyWordTxtToList();
+        keyWordLineToList();
 
         try {
             triggeredPostAlerter = new TriggeredPostAlerter();
@@ -26,10 +30,56 @@ public class CheckForKeywords {
         }
     }
 
-    private void keyWordTxtToList()  {
+    private void keyWordLineToList() {
+
+        try {
+            String categoryKey = null;
+
+            Scanner fileScanner = new Scanner(new File("./settings/keywords.txt"));
+            
+            while (fileScanner.hasNextLine()) {
+                int lineIterator = 0;
+                String row = fileScanner.nextLine();
+                Scanner rowScanner = new Scanner(row);  
+                String value;
+
+                while (rowScanner.hasNext()) {
+                    value = rowScanner.next();
+                    if (lineIterator == 0) {
+                        categoryKey = value;
+                    }
+                    else {
+                        keyWordsTxtList.add(value);
+                    }
+                    lineIterator++;
+                }
+
+                //A copy is taken of the row's arraylist and put into a hashmap with the category name as the key
+                List<String> keyWordTxtListCopy = new ArrayList<>(keyWordsTxtList);
+                keyWordCategoryMap.put(categoryKey, keyWordTxtListCopy);
+                
+                //Original arraylist is cleared for the next row
+                keyWordsTxtList.clear();
+
+                //RowsScanner can be opened and closed on every iteration. (System.in scanners can only be closed once during execution)
+                rowScanner.close();
+            }
+            
+            fileScanner.close();
+            System.out.println(keyWordCategoryMap);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+    }
+
+    /*private void keyWordTxtToList()  {
         Scanner keyWordScanner;
         try {
             keyWordScanner = new Scanner(new File("./settings/keywords.txt"));
+            
+            //Skipping the first value of the line
+            keyWordScanner.next();
+            
             while (keyWordScanner.hasNext()) {
                 keyWordsTxtList.add(keyWordScanner.next());
             }
@@ -37,7 +87,7 @@ public class CheckForKeywords {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public ArrayList<String> getTriggeredPosts() {
         return triggeredPosts;
@@ -45,6 +95,7 @@ public class CheckForKeywords {
 
     public void checkKeywords(String imgTxt, String postId, String postLink) {
         boolean containsKeyWord = false;
+        String categoryName = "";
 
         //Check if the triggered post has already been added to the list
         for (String listElement : triggeredPosts) {
@@ -53,11 +104,24 @@ public class CheckForKeywords {
             }
         }
 
-        for (int i=0; i<keyWordsTxtList.size(); i++) {
+        /*for (int i=0; i<keyWordsTxtList.size(); i++) {
             if (imgTxt.contains(keyWordsTxtList.get(i))) {
                 triggeredPosts.add(postId);
                 containsKeyWord = true;
                 break;
+            }
+        }*/
+
+        for (String key : keyWordCategoryMap.keySet()) {
+            List<String> keyWordList = keyWordCategoryMap.get(key);
+            for (String keyWord : keyWordList) {
+                if (imgTxt.contains(keyWord)) {
+                    triggeredPosts.add(postId);
+                    containsKeyWord = true;
+                    categoryName = key;
+                    System.out.println("KEYWORD (HASHMAPISSA) LÖYTYI POSTAUKSESTA");
+                    break;
+                }
             }
         }
 
@@ -67,13 +131,13 @@ public class CheckForKeywords {
         }*/
 
         if (containsKeyWord) {
-            triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId, postLink);
+            triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId, postLink, categoryName);
         }
     }
 
     //Check if the post's text includes numbers between the set keynumbers
     /*public boolean checkStringForNumberBetween(String imgTxt) {
-          long minNumber = 70;
+        long minNumber = 70;
         long maxNumber = 94;
 
         //Regex that finds all numbers from msg

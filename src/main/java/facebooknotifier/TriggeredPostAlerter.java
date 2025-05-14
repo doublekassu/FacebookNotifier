@@ -22,10 +22,10 @@ public class TriggeredPostAlerter {
         this.jda.addEventListener(new DiscordListeners());
     }
 
-    public void newPostAlertDiscord(String channelId, String imgtxt, String postId, String postLink) {
+    public void newPostAlertDiscord(String channelId, String imgtxt, String postId, String postLink, String keyWordCategory) {
         TextChannel channel = jda.getTextChannelById(channelId);
         if (channel != null) {
-            channel.sendMessage(imgtxt + "\n" + postLink + "\n").queue();
+            channel.sendMessage("CATEGORY: " + keyWordCategory + "\n" + imgtxt + "\n" + postLink + "\n").queue();
         } else {
             System.out.println("Channel with ID " + channelId + " not found.");
         }
