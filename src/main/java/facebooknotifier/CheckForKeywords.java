@@ -75,7 +75,6 @@ public class CheckForKeywords {
         }
     }
 
-<<<<<<< HEAD
     public void keyNumberLineTolist() {
         String categoryKey = null;
 
@@ -117,60 +116,6 @@ public class CheckForKeywords {
         }
     }
 
-    //Check if the post's text includes numbers between the set keynumbers
-    /*public boolean checkStringForNumberBetween(String imgTxt) {
-        String categoryKey = null;
-
-        Scanner fileScanner = new Scanner(new File("./settings/keynumbers.txt"));
-
-        while (fileScanner.hasNextLine()) {
-            int lineIterator = 0;
-            String row = fileScanner.nextLine();
-            Scanner rowScanner = new Scanner(row);  
-            String value;
-
-            while (rowScanner.hasNext()) {
-                value = rowScanner.next();
-                if (lineIterator == 0) {
-                    categoryKey = value;
-                }
-                else {
-                    keyNumbersList.add(Float.parseFloat(value));
-                }
-                lineIterator++;
-            }
-            //A copy is taken of the row's arraylist and put into a hashmap with the category name as the key
-            List<Float> keyNumberListCopy = new ArrayList<>(keyNumbersList);
-            keyNumberCategoryMap.put(categoryKey, keyNumberListCopy);
-            
-            //Original arraylist is cleared for the next row
-            keyNumbersList.clear();
-
-            //RowsScanner can be opened and closed on every iteration. (System.in scanners can only be closed once during execution)
-            rowScanner.close();
-
-        }
-        
-        //Regex that finds all numbers from msg
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(imgTxt);
-
-        boolean checkNumbers = false;
-
-        //Integrate all numbers
-        while (matcher.find()) {
-            long number = Long.parseLong(matcher.group());
-
-            if (number >= minNumber && number <= maxNumber) {
-                checkNumbers = true;
-                break;
-            }
-        }
-        return checkNumbers;
-    }*/
-
-=======
->>>>>>> bc95df6641f497af0312bb79cbc9e231e8805042
     public ArrayList<String> getTriggeredPosts() {
         return triggeredPosts;
     }
@@ -178,6 +123,8 @@ public class CheckForKeywords {
     public void checkKeywords(String imgTxt, String postId, String postLink) {
         boolean containsKeyWord = false;
         String categoryName = "";
+        float minNumber = 0;
+        float maxNumber = 0;
 
         //Check if the triggered post has already been added to the list
         for (String listElement : triggeredPosts) {
@@ -199,20 +146,38 @@ public class CheckForKeywords {
             }
         }
 
-        //Check if the post's text includes numbers between the set keynumbers
-        /*if (checkStringForNumberBetween(imgTxt) && containsKeyWord == false) {
-            containsKeyWord = true;
-        }*/
+        for (String key : keyNumberCategoryMap.keySet()) {
+            categoryName = key;
+            List<Float> keyNumberList = keyNumberCategoryMap.get(key);
+            for (int i = 0; i < keyNumberList.size(); i++) {
+                if (i == 0) {
+                    minNumber = keyNumberList.get(i);
+                }
+                else if (i == 1) {
+                    maxNumber = keyNumberList.get(i);
+                }
+            }
+        }
 
-        if (containsKeyWord) {
+        //Regex that finds all numbers from msg
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(imgTxt);
+
+        boolean containsKeyNumber = false;
+
+        //Integrate all numbers
+        while (matcher.find()) {
+            long number = Long.parseLong(matcher.group());
+
+            if (number >= minNumber && number <= maxNumber) {
+                containsKeyNumber = true;
+                break;
+            }
+        }
+
+        if (containsKeyWord || containsKeyNumber) {
             triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId, postLink, categoryName);
         }
-    }
-<<<<<<< HEAD
-=======
-
-    private void keyNumberToList() {
-
     }
 
     public boolean checkStringForNumberBetween(String imgTxt) {
@@ -241,5 +206,4 @@ public class CheckForKeywords {
         }
         return checkNumbers;
     }*/
->>>>>>> bc95df6641f497af0312bb79cbc9e231e8805042
 }
