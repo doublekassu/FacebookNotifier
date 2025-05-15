@@ -75,6 +75,7 @@ public class CheckForKeywords {
         }
     }
 
+<<<<<<< HEAD
     public void keyNumberLineTolist() {
         String categoryKey = null;
 
@@ -168,6 +169,8 @@ public class CheckForKeywords {
         return checkNumbers;
     }*/
 
+=======
+>>>>>>> bc95df6641f497af0312bb79cbc9e231e8805042
     public ArrayList<String> getTriggeredPosts() {
         return triggeredPosts;
     }
@@ -182,14 +185,6 @@ public class CheckForKeywords {
                 return;
             }
         }
-
-        /*for (int i=0; i<keyWordsTxtList.size(); i++) {
-            if (imgTxt.contains(keyWordsTxtList.get(i))) {
-                triggeredPosts.add(postId);
-                containsKeyWord = true;
-                break;
-            }
-        }*/
 
         for (String key : keyWordCategoryMap.keySet()) {
             List<String> keyWordList = keyWordCategoryMap.get(key);
@@ -213,4 +208,38 @@ public class CheckForKeywords {
             triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId, postLink, categoryName);
         }
     }
+<<<<<<< HEAD
+=======
+
+    private void keyNumberToList() {
+
+    }
+
+    public boolean checkStringForNumberBetween(String imgTxt) {
+        return true;
+    }
+
+    //Check if the post's text includes numbers between the set keynumbers
+    /*public boolean checkStringForNumberBetween(String imgTxt) {
+        long minNumber = 70;
+        long maxNumber = 94;
+
+        //Regex that finds all numbers from msg
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(imgTxt);
+
+        boolean checkNumbers = false;
+
+        //Integrate all numbers
+        while (matcher.find()) {
+            long number = Long.parseLong(matcher.group());
+
+            if (number >= minNumber && number <= maxNumber) {
+                checkNumbers = true;
+                break;
+            }
+        }
+        return checkNumbers;
+    }*/
+>>>>>>> bc95df6641f497af0312bb79cbc9e231e8805042
 }
