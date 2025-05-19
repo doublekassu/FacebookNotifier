@@ -1,6 +1,7 @@
 package facebooknotifier;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 import java.io.File;
 
 public class CheckForKeywords {
-    private ArrayList<String> triggeredPosts;
+    private ArrayDeque<String> triggeredPosts;
     private TriggeredPostAlerter triggeredPostAlerter;
 
     private ArrayList<String> keyWordsTxtList;
@@ -19,7 +20,8 @@ public class CheckForKeywords {
     private HashMap<String, List<Float>> keyNumberCategoryMap = new HashMap<>();
 
     public CheckForKeywords()  {
-        triggeredPosts = new ArrayList<>();
+        triggeredPosts = new ArrayDeque<>();
+        System.out.println("WHEN EMPTY, ARRAYDEQUE'S SIZE IS: " + triggeredPosts.size());
         keyWordsTxtList = new ArrayList<>();
         keyNumbersList = new ArrayList<>();
         lineValuesToList("./settings/keywords.txt");
@@ -83,7 +85,7 @@ public class CheckForKeywords {
         }
     }
 
-    public ArrayList<String> getTriggeredPosts() {
+    public ArrayDeque<String> getTriggeredPosts() {
         return triggeredPosts;
     }
 
@@ -141,8 +143,17 @@ public class CheckForKeywords {
         }
 
         if (containsKeyWord || containsKeyNumber) {
-            triggeredPosts.add(postId);
+            triggeredPostsAdd(triggeredPosts, postId);
             triggeredPostAlerter.newPostAlertDiscord("1330963084965056616", imgTxt, postId, postLink, categoryName);
         }
+    }
+
+    //Separate method for adding triggered posts to remove the oldest one when the size is x
+    private void triggeredPostsAdd(ArrayDeque<String> triggeredPosts, String postId) {
+        if (triggeredPosts.size() > 4) {
+            System.out.println("The size of triggeredPosts is more than 4. Removing the first value.");
+            triggeredPosts.pollFirst();
+        }
+        triggeredPosts.add(postId); 
     }
 }
