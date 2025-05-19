@@ -54,12 +54,12 @@ public class ProcessMessages {
                 if (counter < 5) {
 
                     Message fullMessage = service.users().messages().get("me", message.getId()).setFormat("RAW").execute();
-                    System.out.println("\nViesti ID: " + fullMessage.getId());
                     String rawData = fullMessage.getRaw();
                     String rawMessage = DecodeMessage.decodeRawMessage(rawData);
                     String imgTxt = rawMessage.substring(rawMessage.lastIndexOf("Hei " + facebookName) + 13, rawMessage.lastIndexOf("=3D=3D=3D") - 121);
                     String postId = rawMessage.substring(rawMessage.lastIndexOf("Message-ID: <") + 13, rawMessage.lastIndexOf("Message-ID: <") + 29);
                     String postLink = parseLink(rawMessage); 
+                    System.out.println("\nFacebook post ID: " + postId);
 
                     //Decode imgtxt with UTF-8 and change it to lower case characters
                     try {
