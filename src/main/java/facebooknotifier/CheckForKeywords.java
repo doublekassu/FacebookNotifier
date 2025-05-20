@@ -24,8 +24,8 @@ public class CheckForKeywords {
         System.out.println("WHEN EMPTY, ARRAYDEQUE'S SIZE IS: " + triggeredPosts.size());
         keyWordsTxtList = new ArrayList<>();
         keyNumbersList = new ArrayList<>();
-        lineValuesToList("./settings/keywords.txt");
-        lineValuesToList("./settings/keynumbers.txt");
+        lineValuesToList(CreateSettings.keyWordsPath);
+        lineValuesToList(CreateSettings.keyNumbersPath);
 
         try {
             triggeredPostAlerter = new TriggeredPostAlerter();

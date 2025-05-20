@@ -9,8 +9,8 @@ import java.awt.Desktop;
 
 public class KeyWords {
 
-    private File keyWordFile = new File("./settings/keywords.txt");
-    private File keyNumberFile = new File("./settings/keynumbers.txt");
+    private File keyWordFile = new File(CreateSettings.keyWordsPath);
+    private File keyNumberFile = new File(CreateSettings.keyNumbersPath);
     private Desktop desktop = Desktop.getDesktop();
 
     public void runMenu() throws IOException {
@@ -25,10 +25,10 @@ public class KeyWords {
                 setNumberBetweenTwoNumbers();
             }
             else if (menuChoice.equals("3")) {
-                printKeyWordsOrNumbers("./settings/keywords.txt", "Keyword");;
+                printKeyWordsOrNumbers(CreateSettings.keyWordsPath, "Keyword");;
             }
             else if (menuChoice.equals("4")) {
-                printKeyWordsOrNumbers("./settings/keynumbers.txt", "Keynumber");;
+                printKeyWordsOrNumbers(CreateSettings.keyNumbersPath, "Keynumber");;
             }
             else if (menuChoice.equals("0")) {
                 break;

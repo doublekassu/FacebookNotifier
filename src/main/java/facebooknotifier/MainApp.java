@@ -9,7 +9,7 @@ import com.google.api.services.gmail.Gmail;
 
 public class MainApp {
     public static void main(String... args) throws IOException, GeneralSecurityException, InterruptedException {
-        createSettings.createSettingsFiles();
+        CreateSettings.createSettingsFiles();
         //Gmail API setup
         final com.google.api.client.http.HttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Gmail service = new Gmail.Builder(HTTP_TRANSPORT, GetCredentials.getJSON_FACTORY() , GetCredentials.getCredentials(HTTP_TRANSPORT))

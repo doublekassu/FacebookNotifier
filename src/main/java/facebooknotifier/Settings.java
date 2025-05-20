@@ -44,7 +44,7 @@ public class Settings {
         System.out.print("\n\nAbove are all your Gmail folders. Please copy and paste the label of the folder you would like to scan in the program: ");
         String label = MainApp.scanner.nextLine();
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter("./settings/folder_label.txt"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(CreateSettings.folderLabelPath));
         writer.write(label);
         writer.close();
 
@@ -55,7 +55,7 @@ public class Settings {
         System.out.print("Input your Facebook account's first name: ");
         String name = MainApp.scanner.nextLine();
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter("./settings/facebook_name.txt"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(CreateSettings.facebookNamePath));
         writer.write(name);
         writer.close();
 

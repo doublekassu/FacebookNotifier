@@ -26,7 +26,7 @@ public class ProcessMessages {
     }
 
     private String getFolderLabel() throws IOException {
-        Scanner labelScanner = new Scanner(Paths.get("./settings/folder_label.txt"), StandardCharsets.UTF_8.name());
+        Scanner labelScanner = new Scanner(Paths.get(CreateSettings.folderLabelPath), StandardCharsets.UTF_8.name());
         String folderLabel = labelScanner.useDelimiter("\\A").next();
         labelScanner.close();
 
@@ -34,7 +34,7 @@ public class ProcessMessages {
     }
 
     private String getFacebookName() throws IOException {
-        Scanner facebookNameScanner = new Scanner(Paths.get("./settings/facebook_name.txt"), StandardCharsets.UTF_8.name());
+        Scanner facebookNameScanner = new Scanner(Paths.get(CreateSettings.facebookNamePath), StandardCharsets.UTF_8.name());
         String facebookName = facebookNameScanner.useDelimiter("\\A").next();
         facebookNameScanner.close();
 
