@@ -15,7 +15,7 @@ public class KeyWords {
 
     public void runMenu() throws IOException {
         while (true) {
-            System.out.print("\n1. Set keywords\n2. Set a number between x and y as a keyword\n3. Print keywords\n0. Exit to main menu\n\nPlease select an operation by typing it and pressing ENTER: ");
+            System.out.print("\n1. Set keywords\n2. Set a number between x and y as a keyword\n3. Print keywords\n4. Print keynumbers\n0. Exit to main menu\n\nPlease select an operation by typing it and pressing ENTER: ");
             String menuChoice = MainApp.scanner.nextLine();
 
             if (menuChoice.equals("1")) {
@@ -25,7 +25,10 @@ public class KeyWords {
                 setNumberBetweenTwoNumbers();
             }
             else if (menuChoice.equals("3")) {
-                printKeyWords();
+                printKeyWordsOrNumbers("./settings/keywords.txt", "Keyword");;
+            }
+            else if (menuChoice.equals("4")) {
+                printKeyWordsOrNumbers("./settings/keynumbers.txt", "Keynumber");;
             }
             else if (menuChoice.equals("0")) {
                 break;
@@ -37,14 +40,15 @@ public class KeyWords {
     }
 
     //Change to exclude the category name
-    private void printKeyWords() throws IOException {
-        Scanner scanner = new Scanner(Paths.get("./settings/keywords.txt"), StandardCharsets.UTF_8.name());
+    private void printKeyWordsOrNumbers(String Path, String keyWordOrNumber) throws IOException {
+        
+        Scanner scanner = new Scanner(Paths.get(Path), StandardCharsets.UTF_8.name());
         
         while (scanner.hasNextLine()) {
             String category = scanner.next();
             System.out.print("Category: " + category);
-            String keywords = scanner.nextLine();
-            System.out.println(". Keywords: " + keywords);
+            String keywordsOrNumbers = scanner.nextLine();
+            System.out.println(". " + keyWordOrNumber + "s:" + keywordsOrNumbers);
         }
         scanner.close();
     }
