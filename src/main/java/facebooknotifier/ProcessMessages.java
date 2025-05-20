@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -57,7 +56,7 @@ public class ProcessMessages {
                     Message fullMessage = service.users().messages().get("me", message.getId()).setFormat("RAW").execute();
                     String rawData = fullMessage.getRaw();
                     String rawMessage = DecodeMessage.decodeRawMessage(rawData);
-                    String imgTxt = rawMessage.substring(rawMessage.lastIndexOf("Hei " + facebookName) + 13, rawMessage.lastIndexOf("=3D=3D=3D") - 121);
+                    String imgTxt = rawMessage.substring(rawMessage.lastIndexOf("Hei ") + facebookName.length() + 5, rawMessage.lastIndexOf("=3D=3D=3D") - 121);
                     String postId = rawMessage.substring(rawMessage.lastIndexOf("Message-ID: <") + 13, rawMessage.lastIndexOf("Message-ID: <") + 29);
                     String postLink = parseLink(rawMessage); 
                     System.out.println("\nFacebook post ID: " + postId);
