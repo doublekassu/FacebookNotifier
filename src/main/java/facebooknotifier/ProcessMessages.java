@@ -3,6 +3,7 @@ package facebooknotifier;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -14,13 +15,13 @@ import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 
 public class ProcessMessages {
-    private ArrayList<String> openedPosts;
+    private ArrayDeque<String> openedPosts;
     private CheckForKeywords checkForKeywords = new CheckForKeywords();
     private String folderLabel;
     private String facebookName;
 
     public ProcessMessages() throws IOException {
-        openedPosts = new ArrayList<>();
+        openedPosts = new ArrayDeque<>();
         folderLabel = getFolderLabel();
         facebookName = getFacebookName();
     }
@@ -103,11 +104,14 @@ public class ProcessMessages {
         return cleanPostLink;
     }
 
-    //Checks opened posts list and adds if new
+    //Checks opened posts list and adds if new. Remove oldest post when post list is > 15.
     public void checkPostList(String postId, String postLink) {
         if (!openedPosts.contains(postId)) {
             openedPosts.add(postId);
             OpenFacebookPost.openFacebookPost(postLink);
+            if (openedPosts.size() > 15) {
+                openedPosts.pollFirst();
+            }
         }
     }
 }
