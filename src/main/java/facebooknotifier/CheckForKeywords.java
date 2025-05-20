@@ -150,10 +150,10 @@ public class CheckForKeywords {
 
     //Separate method for adding triggered posts to remove the oldest one when the size is x
     private void triggeredPostsAdd(ArrayDeque<String> triggeredPosts, String postId) {
+        triggeredPosts.add(postId); 
         if (triggeredPosts.size() > 4) {
             System.out.println("The size of triggeredPosts is more than 4. Removing the first value.");
             triggeredPosts.pollFirst();
         }
-        triggeredPosts.add(postId); 
     }
 }

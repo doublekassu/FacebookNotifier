@@ -25,7 +25,7 @@ public class KeyWords {
                 setNumberBetweenTwoNumbers();
             }
             else if (menuChoice.equals("3")) {
-                //printKeyWords();
+                printKeyWords();
             }
             else if (menuChoice.equals("0")) {
                 break;
@@ -37,12 +37,17 @@ public class KeyWords {
     }
 
     //Change to exclude the category name
-    /*private void printKeyWords() throws IOException {
+    private void printKeyWords() throws IOException {
         Scanner scanner = new Scanner(Paths.get("./settings/keywords.txt"), StandardCharsets.UTF_8.name());
-                String content = scanner.useDelimiter("\\A").next();
-                scanner.close();
-                System.out.println("\nCurrent keywords set: " + content);
-    }*/
+        
+        while (scanner.hasNextLine()) {
+            String category = scanner.next();
+            System.out.print("Category: " + category);
+            String keywords = scanner.nextLine();
+            System.out.println(". Keywords: " + keywords);
+        }
+        scanner.close();
+    }
 
     private void changeKeyWords() {
         System.out.println("\nSet keywords that will send you a notification on Discord if they're included in a Facebook post! The keywords are categorized by lines. The first word of each line is the name of the category and it's not included in the scans! Please leave a whitespace between each keyword!\nExample of keyword category: category_name keyword1 keyword2");
